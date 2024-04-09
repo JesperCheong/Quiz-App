@@ -1,36 +1,19 @@
-function displayQuestion() {
-  questionDisplay.innerText += questions.question;
-  for (let i = 0; i < questions.option.length; i++) {
-    radioBtn[i].value = questions.option[i]
-    optionDisplays[i].innerHTML = questions.option[i];
-  }
-}
-
-function checkAnswer() {
-  choosenAnswer = document.querySelector("input[name='flexRadioDefault']:checked");
-  if (choosenAnswer.value === questions.answer) {
-    console.log("correct");
-  } else {
-    console.log("wrong");
-  }
-}
-
 async function fetchQuestions() {
   try {
   const response = await fetch("https://opentdb.com/api.php?amount=10&category=27&difficulty=easy&type=multiple");
   const data = await response.json();
     if (data.response_code === 0) {
       console.log("Success: Returned results successfully.");
-
+      
       questions = data.results.map(item => {
+        const tempOptions = [...item.incorrect_answers, item.correct_answer]
+        const randomizedOptions = shuffleArray(tempOptions); //shuffle options
         return {
           question : item.question,
           answer : item.correct_answer,
-          options : [...item.incorrect_answers, item.correct_answer],
+          options : randomizedOptions,
         }
       });
-
-      console.log(questions);
     } 
     // handle error according to API documentation for response_code
     else if (data.response_code === 1) {
@@ -52,6 +35,33 @@ async function fetchQuestions() {
     console.error("Error: Network Error:", error.message);
   }
 }
+
+// Fisher-Yates shuffle to shuffle question options
+function shuffleArray(array) {
+  for (let i = array.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [array[i], array[j]] = [array[j], array[i]];
+  }
+  return array;
+}
+
+function displayQuestion() {
+  questionDisplay.innerText += questions.question;
+  for (let i = 0; i < questions.option.length; i++) {
+    radioBtn[i].value = questions.option[i]
+    optionDisplays[i].innerHTML = questions.option[i];
+  }
+}
+
+function checkAnswer() {
+  choosenAnswer = document.querySelector("input[name='flexRadioDefault']:checked");
+  if (choosenAnswer.value === questions.answer) {
+    console.log("correct");
+  } else {
+    console.log("wrong");
+  }
+}
+
   
 
 let questions = [];
