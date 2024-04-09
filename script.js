@@ -18,22 +18,22 @@ async function fetchQuestions() {
     }
     // handle error according to API documentation for response_code
     else if (data.response_code === 1) {
-      console.error("Error: No Results. Could not return results. The API doesn't have enough questions for your query.");
+      alert("Error: No Results. Could not return results. The API doesn't have enough questions for your query.");
     } else if (data.response_code === 2) {
-      console.error("Error: Invalid Parameter. Contains an invalid parameter. Arguments passed in aren't valid.");
+      alert("Error: Invalid Parameter. Contains an invalid parameter. Arguments passed in aren't valid.");
     } else if (data.response_code === 3) {
-      console.error("Error: Token Not Found. Session Token does not exist.");
+      alert("Error: Token Not Found. Session Token does not exist.");
     } else if (data.response_code === 4) {
-      console.error("Error: Token Empty. Session Token has returned all possible questions for the specified query. Resetting the Token is necessary.");
+      alert("Error: Token Empty. Session Token has returned all possible questions for the specified query. Resetting the Token is necessary.");
     } else if (data.response_code === 5) {
-      console.error("Error: Rate Limit. Too many requests have occurred. Each IP can only access the API once every 5 seconds.");
+      alert("Error: Rate Limit. Too many requests have occurred. Each IP can only access the API once every 5 seconds.");
     } else {
       // for any unexpected error
-      console.error("Error: Unknown Error.");
+      alert("Error: Unknown Error.");
     }
   } catch (error) {
     // for any other network error
-    console.error("Error: Network Error:", error.message);
+    alert("Error: Network Error:", error.message);
   }
 }
 
@@ -52,7 +52,6 @@ async function displayQuestions() {
   console.log(questions);
 
   const questionsSection = document.getElementById("questions");
-
   questions.forEach((question, index) => {
     //wrapper
     const questionWrapper = document.createElement("div");
@@ -67,7 +66,7 @@ async function displayQuestions() {
     questionText.textContent = question.question;
     questionWrapper.appendChild(questionText);
     //options
-    question.options.forEach((option, index) => {
+    question.options.forEach((option) => {
       const form = document.createElement("div");
       form.className = "form-check";
       //create input
@@ -83,7 +82,7 @@ async function displayQuestions() {
       form.appendChild(label);
       questionWrapper.appendChild(form);
     });
-  questionsSection.appendChild(questionWrapper);
+    questionsSection.appendChild(questionWrapper);
   });
 }
 
