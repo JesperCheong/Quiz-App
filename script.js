@@ -22,7 +22,7 @@ async function fetchQuestions() {
       //remove loading spinner
       const loading = document.getElementById("loading-spinner");
       loading.remove();
-      //organize data
+      //organize data without cleaning up special char
       const tempQuestions = data.results.map(item => {
         //shuffle options
         const tempOptions = [...item.incorrect_answers, item.correct_answer]
@@ -34,6 +34,7 @@ async function fetchQuestions() {
           options: randomizedOptions,
         }
       });
+      //decode special char
       questions = tempQuestions.map(questionObj => ({
         question: decodeEntities(questionObj.question),
         answer: decodeEntities(questionObj.answer),
@@ -66,20 +67,20 @@ async function render() {
 
   const questionsSection = document.getElementById("questions");
   questions.forEach((question, index) => {
-    //wrapper
+    //create wrapper
     const questionWrapper = document.createElement("div");
     questionWrapper.className = "col-md-6 p-3 p-xxl-5";
-    //question number
+    //create question number
     const questionCounter = document.createElement("h5");
     questionCounter.classList = "border-0 rounded-3 bg-primary text-white p-2"
     questionCounter.textContent = `Question ${index + 1}`;
     questionWrapper.appendChild(questionCounter);
-    //question text
+    //create question text
     const questionText = document.createElement("div");
     questionText.className = "pb-3 ps-4";
     questionText.textContent = question.question;
     questionWrapper.appendChild(questionText);
-    //options
+    //craete options
     question.options.forEach((option) => {
       const form = document.createElement("div");
       form.className = "form-check";
@@ -101,14 +102,27 @@ async function render() {
   });
 }
 
-/* function checkAnswer() {
-  choosenAnswer = document.querySelector("input[name='flexRadioDefault']:checked");
-  if (choosenAnswer.value === questions.answer) {
-    console.log("correct");
-  } else {
-    console.log("wrong");
+function checkAnswer() {
+  //store user answers in an object
+  choosenAnswers = {};
+  for (i = 1; i <= questions.length; i++) {
+    choosenAnswer = document.querySelector(`input[name='question${i}']:checked`);
+    if (choosenAnswer) {
+      choosenAnswers[`question${i}`] = choosenAnswer.value;
+    } else {
+      choosenAnswers[`question${i}`] = "";
+    }
   }
-} */
+  console.log(choosenAnswers);
+  //comparing user answers with correct answers
+  for (i = 0; i < questions.length; i++) {
+    if (choosenAnswers[`question${i+1}`] === questions[i].answer) {
+      console.log("correct");
+    } else {
+      console.log("wrong");
+    }
+  }
+}
 
 let questions = [];
 render();
