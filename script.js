@@ -46,7 +46,6 @@ function shuffleArray(array) {
   return array;
 }
 
-// need to iterate through "questions" and display question 1 by 1 on html
 async function displayQuestions() {
   await fetchQuestions();
   console.log(questions);
@@ -58,11 +57,12 @@ async function displayQuestions() {
     questionWrapper.className = "col-md-6 p-3 p-xxl-5";
     //question number
     const questionCounter = document.createElement("h5");
+    questionCounter.classList = "border-0 rounded-3 bg-primary text-white p-2"
     questionCounter.textContent = `Question ${index + 1}`;
     questionWrapper.appendChild(questionCounter);
     //question text
     const questionText = document.createElement("div");
-    questionText.className = "pb-3";
+    questionText.className = "pb-3 ps-4";
     questionText.textContent = question.question;
     questionWrapper.appendChild(questionText);
     //options
@@ -74,6 +74,7 @@ async function displayQuestions() {
       input.className = "form-check-input";
       input.type = "radio";
       input.value = option;
+      input.name = `question${index+1}`;
       form.appendChild(input);
       //create label
       const label = document.createElement("label");
@@ -95,14 +96,7 @@ async function displayQuestions() {
   }
 } */
 
-
-
 let questions = [];
-
-/* const questionDisplay = document.getElementById("question");
-const radioBtn = document.querySelectorAll(".form-check-input");
-const optionDisplays = document.querySelectorAll(".form-check-label"); */
-
 displayQuestions();
 
 

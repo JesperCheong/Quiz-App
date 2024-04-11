@@ -18,9 +18,9 @@
 
 <body>
   <header>
-    <nav class="navbar bg-body-tertiary">
+    <nav class="navbar bg-primary">
       <div class="container-fluid">
-        <a class="navbar-brand fw-bold fs-1" href="#">
+        <a class="navbar-brand fw-bold fs-1 text-white" href="#">
           <i class="bi bi-patch-question-fill"></i>
           Quiz App
         </a>
@@ -30,29 +30,17 @@
 
   <div class="container-fluid px-auto">
     <div class="row row-col-2 px-1 mx-1 px-lg-3 mx-lg-3 px-lg-5 mx-lg-5" id="questions">
-      
-      
-
-      </div>
-
+      <!-- render questions here -->
     </div>
-
-    
-
-
-
-
-
-
-
-
   </div>
 
 
-  <button class="btn btn-primary" onclick="checkAnswer()">Submit</button>
+  <div class="container-fluid text-center py-5">
+    <button class="btn btn-primary fw-bold fs-5" onclick="checkAnswer()">Check Answer</button>
+  </div>
 
-
-
+  <div class="py-3">&#160;</div> <!-- to space out footer position:fixed -->
+  <div class="bg-primary text-white text-center py-3 fixed-bottom">2024 Quiz App by Jesper</div>
 
 
   <script src="script.js"></script>
