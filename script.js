@@ -1,3 +1,18 @@
+// "Fisher-Yates" for shuffling options
+function shuffleArray(array) {
+  for (let i = array.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [array[i], array[j]] = [array[j], array[i]];
+  }
+  return array;
+}
+// decorder for special character from API
+function decodeEntities(encodedString) {
+  const tempElement = document.createElement('div');
+  tempElement.innerHTML = encodedString;
+  return tempElement.textContent || tempElement.innerText;
+}
+
 async function fetchQuestions() {
   try {
     const response = await fetch("https://opentdb.com/api.php?amount=10&category=18");
@@ -8,7 +23,7 @@ async function fetchQuestions() {
       const loading = document.getElementById("loading-spinner");
       loading.remove();
       //organize data
-      questions = data.results.map(item => {
+      const tempQuestions = data.results.map(item => {
         //shuffle options
         const tempOptions = [...item.incorrect_answers, item.correct_answer]
         const randomizedOptions = shuffleArray(tempOptions);
@@ -19,6 +34,11 @@ async function fetchQuestions() {
           options: randomizedOptions,
         }
       });
+      questions = tempQuestions.map(questionObj => ({
+        question: decodeEntities(questionObj.question),
+        answer: decodeEntities(questionObj.answer),
+        options: questionObj.options.map(option => decodeEntities(option))
+      }));
     }
     // handle error according to API documentation for response_code
     else if (data.response_code === 1) {
@@ -40,18 +60,9 @@ async function fetchQuestions() {
     alert("Error: Network Error:", error.message);
   }
 }
-
-// "Fisher-Yates" for shuffling options
-function shuffleArray(array) {
-  for (let i = array.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [array[i], array[j]] = [array[j], array[i]];
-  }
-  return array;
-}
-
 async function render() {
   await fetchQuestions();
+  console.log(questions);
 
   const questionsSection = document.getElementById("questions");
   questions.forEach((question, index) => {
@@ -77,7 +88,7 @@ async function render() {
       input.className = "form-check-input";
       input.type = "radio";
       input.value = option;
-      input.name = `question${index+1}`;
+      input.name = `question${index + 1}`;
       form.appendChild(input);
       //create label
       const label = document.createElement("label");
