@@ -29,7 +29,12 @@
   </header>
 
   <div class="container-fluid px-auto">
-    <div class="row row-col-2 px-1 mx-1 px-lg-3 mx-lg-3 px-lg-5 mx-lg-5" id="questions">
+    <!-- loading spinner when fecthing data from API -->
+    <div class="spinner-border text-primary d-block mx-auto my-5" role="status" id="loading-spinner">
+      <span class="visually-hidden">Loading...</span>
+    </div>
+    
+    <div class="row row-col-2 px-1 mx-1 px-lg-3 mx-lg-3 px-lg-5 mx-lg-5 mt-4" id="questions">
       <!-- render questions here -->
     </div>
   </div>

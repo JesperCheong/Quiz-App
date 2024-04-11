@@ -4,6 +4,10 @@ async function fetchQuestions() {
     const data = await response.json();
     if (data.response_code === 0) {
       console.log("Success: Returned results successfully.");
+      //remove loading spinner
+      const loading = document.getElementById("loading-spinner");
+      loading.remove();
+      //organize data
       questions = data.results.map(item => {
         //shuffle options
         const tempOptions = [...item.incorrect_answers, item.correct_answer]
@@ -46,9 +50,8 @@ function shuffleArray(array) {
   return array;
 }
 
-async function displayQuestions() {
+async function render() {
   await fetchQuestions();
-  console.log(questions);
 
   const questionsSection = document.getElementById("questions");
   questions.forEach((question, index) => {
@@ -97,6 +100,6 @@ async function displayQuestions() {
 } */
 
 let questions = [];
-displayQuestions();
+render();
 
 
