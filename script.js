@@ -73,6 +73,7 @@ async function render() {
     //create question number
     const questionCounter = document.createElement("h5");
     questionCounter.classList = "border-0 rounded-3 bg-primary text-white p-2"
+    questionCounter.id = `questionCounter${index + 1}`
     questionCounter.textContent = `Question ${index + 1}`;
     questionWrapper.appendChild(questionCounter);
     //create question text
@@ -86,14 +87,14 @@ async function render() {
       form.className = "form-check";
       //create input
       const input = document.createElement("input");
-      input.className = "form-check-input";
+      input.className = "form-check-input opacity-100";
       input.type = "radio";
       input.value = option;
       input.name = `question${index + 1}`;
       form.appendChild(input);
       //create label
       const label = document.createElement("label");
-      label.className = "form-check-label";
+      label.className = "form-check-label opacity-100";
       label.textContent = option;
       form.appendChild(label);
       questionWrapper.appendChild(form);
@@ -114,14 +115,34 @@ function checkAnswer() {
     }
   }
   console.log(choosenAnswers);
+
   //comparing user answers with correct answers
-  for (i = 0; i < questions.length; i++) {
-    if (choosenAnswers[`question${i+1}`] === questions[i].answer) {
-      console.log("correct");
+  for (i = 1; i <= questions.length; i++) {
+    currentAnswer = choosenAnswers[`question${i}`]
+
+    if (currentAnswer === "") {
+      questionNode = document.getElementById(`questionCounter${i}`);
+      questionNode.textContent += " 😥";
+    } else if (typeof (currentAnswer) === "string") {
+      choosenAnswerLabel = document.querySelector(`input[name='question${i}']:checked`).nextElementSibling;
+      if (currentAnswer === questions[i - 1].answer) {
+        choosenAnswerLabel.textContent += " 😀";
+      } else if (!(currentAnswer === questions[i - 1].answer)) {
+        choosenAnswerLabel.textContent += " 😥";
+      }
     } else {
-      console.log("wrong");
+      alert("An error occurred. Please contact dev.")
     }
   }
+
+  //disable all option after submitted answer
+  allOptions = document.querySelectorAll("input[type='radio']");
+  allOptions.forEach(option => {
+    option.disabled = true;
+  });
+
+
+  
 }
 
 let questions = [];
