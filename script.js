@@ -61,46 +61,9 @@ async function fetchQuestions() {
     alert("Error: Network Error:", error.message);
   }
 }
-async function render() {
+async function initialRender() {
   await fetchQuestions();
-  console.log(questions);
-
-  const questionsSection = document.getElementById("questions");
-  questions.forEach((question, index) => {
-    //create wrapper
-    const questionWrapper = document.createElement("div");
-    questionWrapper.className = "col-md-6 p-3 p-xxl-5";
-    //create question number
-    const questionCounter = document.createElement("h5");
-    questionCounter.classList = "border-0 rounded-3 bg-primary text-white p-2"
-    questionCounter.id = `questionCounter${index + 1}`
-    questionCounter.textContent = `Question ${index + 1}`;
-    questionWrapper.appendChild(questionCounter);
-    //create question text
-    const questionText = document.createElement("div");
-    questionText.className = "pb-3 ps-4";
-    questionText.textContent = question.question;
-    questionWrapper.appendChild(questionText);
-    //craete options
-    question.options.forEach((option) => {
-      const form = document.createElement("div");
-      form.className = "form-check";
-      //create input
-      const input = document.createElement("input");
-      input.className = "form-check-input opacity-100";
-      input.type = "radio";
-      input.value = option;
-      input.name = `question${index + 1}`;
-      form.appendChild(input);
-      //create label
-      const label = document.createElement("label");
-      label.className = "form-check-label opacity-100";
-      label.textContent = option;
-      form.appendChild(label);
-      questionWrapper.appendChild(form);
-    });
-    questionsSection.appendChild(questionWrapper);
-  });
+  renderQuestions();
 }
 
 function checkAnswer() {
@@ -141,11 +104,102 @@ function checkAnswer() {
     option.disabled = true;
   });
 
-
   
+  //render reset button
+  submitBtn = document.getElementById("submitBtn")
+  submitBtn.remove();
+  renderResetBtn();
+
+
+
+}
+function reset() {
+  const questionsSection = document.getElementById("questions");
+  while (questionsSection.firstChild) {
+    questionsSection.removeChild(questionsSection.firstChild);
+  }
+  renderQuestions();
+  //remove reset button
+  resetBtn = document.getElementById("resetBtn")
+  resetBtn.remove();
 }
 
-let questions = [];
-render();
+function renderQuestions() {
+  const questionsSection = document.getElementById("questions");
+  if (questions) {
+    questions.forEach((question, index) => {
+      //create wrapper
+      const questionWrapper = document.createElement("div");
+      questionWrapper.className = "col-md-6 p-3 p-xxl-5";
+      //create question number
+      const questionCounter = document.createElement("h5");
+      questionCounter.classList = "border-0 rounded-3 bg-primary text-white p-2"
+      questionCounter.id = `questionCounter${index + 1}`
+      questionCounter.textContent = `Question ${index + 1}`;
+      questionWrapper.appendChild(questionCounter);
+      //create question text
+      const questionText = document.createElement("div");
+      questionText.className = "pb-3 ps-4";
+      questionText.textContent = question.question;
+      questionWrapper.appendChild(questionText);
+      //craete options
+      question.options.forEach((option) => {
+        const form = document.createElement("div");
+        form.className = "form-check";
+        //create input
+        const input = document.createElement("input");
+        input.className = "form-check-input opacity-100";
+        input.type = "radio";
+        input.value = option;
+        input.name = `question${index + 1}`;
+        form.appendChild(input);
+        //create label
+        const label = document.createElement("label");
+        label.className = "form-check-label opacity-100";
+        label.textContent = option;
+        form.appendChild(label);
+        questionWrapper.appendChild(form);
+      });
+      questionsSection.appendChild(questionWrapper);
+    });
+    renderSubmitBtn();
+  }
+}
+function renderSubmitBtn() {
+  const buttonWrapper = document.getElementById("buttonWrapper");
+  const submitBtn = document.createElement("button");
+  submitBtn.setAttribute("onclick", "checkAnswer()");
+  submitBtn.id = "submitBtn";
+  submitBtn.className = "btn btn-primary fw-bold fs-5";
+  submitBtn.textContent = "Check Answer";
+  buttonWrapper.appendChild(submitBtn);
+}
+function renderResetBtn() {
+  const buttonWrapper = document.getElementById("buttonWrapper");
+  const resetBtn = document.createElement("button");
+  resetBtn.setAttribute("onclick", "reset()");
+  resetBtn.id = "resetBtn";
+  resetBtn.className = "btn btn-primary fw-bold fs-5";
+  resetBtn.textContent = "Reset";
+  buttonWrapper.appendChild(resetBtn);
+  renderScore();
+  renderMsg();
+}
+function renderScore() {
+  const scoreWrapper = document.createElement("div");
+  scoreWrapper.className = "text-center";
+  scoreWrapper.textContent = "Score";
+  buttonWrapper.appendChild(scoreWrapper);
+}
+function renderMsg() {
+  const msgWrapper = document.createElement("div");
+  msgWrapper.className = "text-center";
+  msgWrapper.textContent = "msg";
+  buttonWrapper.appendChild(msgWrapper);
+}
+
+
+let questions;
+initialRender();
 
 
