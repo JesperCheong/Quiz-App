@@ -77,8 +77,6 @@ function checkAnswer() {
       choosenAnswers[`question${i}`] = "";
     }
   }
-  console.log(choosenAnswers);
-
   //comparing user answers with correct answers
   for (i = 1; i <= questions.length; i++) {
     currentAnswer = choosenAnswers[`question${i}`]
@@ -98,7 +96,6 @@ function checkAnswer() {
       alert("An error occurred. Please contact dev.")
     }
   }
-
   //disable all option after submitted answer
   allOptions = document.querySelectorAll("input[type='radio']");
   allOptions.forEach(option => {
@@ -107,16 +104,10 @@ function checkAnswer() {
   //render score & message
   renderScore();
   renderMsg();
-
-
-
   //render reset button
   submitBtn = document.getElementById("submitBtn")
   submitBtn.remove();
   renderResetBtn();
-
-
-
 }
 function reset() {
   score = 0;
@@ -171,7 +162,6 @@ function renderQuestions() {
   }
 }
 function renderSubmitBtn() {
-  const buttonWrapper = document.getElementById("buttonWrapper");
   const submitBtn = document.createElement("button");
   submitBtn.setAttribute("onclick", "checkAnswer()");
   submitBtn.id = "submitBtn";
@@ -180,7 +170,6 @@ function renderSubmitBtn() {
   buttonWrapper.appendChild(submitBtn);
 }
 function renderResetBtn() {
-  const buttonWrapper = document.getElementById("buttonWrapper");
   const resetBtn = document.createElement("button");
   resetBtn.setAttribute("onclick", "reset()");
   resetBtn.id = "resetBtn";
@@ -211,10 +200,10 @@ function renderMsg() {
   questionsSection.appendChild(msgWrapper);
 }
 
-
 let questions;
 let score = 0; //counter for score
 const questionsSection = document.getElementById("questions");
+const buttonWrapper = document.getElementById("buttonWrapper");
 initialRender();
 
 
