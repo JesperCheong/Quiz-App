@@ -90,6 +90,7 @@ function checkAnswer() {
       choosenAnswerLabel = document.querySelector(`input[name='question${i}']:checked`).nextElementSibling;
       if (currentAnswer === questions[i - 1].answer) {
         choosenAnswerLabel.textContent += " 😀";
+        score++;
       } else if (!(currentAnswer === questions[i - 1].answer)) {
         choosenAnswerLabel.textContent += " 😥";
       }
@@ -103,8 +104,12 @@ function checkAnswer() {
   allOptions.forEach(option => {
     option.disabled = true;
   });
+  //render score & message
+  renderScore();
+  renderMsg();
 
-  
+
+
   //render reset button
   submitBtn = document.getElementById("submitBtn")
   submitBtn.remove();
@@ -114,18 +119,18 @@ function checkAnswer() {
 
 }
 function reset() {
-  const questionsSection = document.getElementById("questions");
+  score = 0;
   while (questionsSection.firstChild) {
     questionsSection.removeChild(questionsSection.firstChild);
   }
-  renderQuestions();
   //remove reset button
   resetBtn = document.getElementById("resetBtn")
   resetBtn.remove();
+  //re-render questions
+  renderQuestions();
 }
 
 function renderQuestions() {
-  const questionsSection = document.getElementById("questions");
   if (questions) {
     questions.forEach((question, index) => {
       //create wrapper
@@ -182,24 +187,34 @@ function renderResetBtn() {
   resetBtn.className = "btn btn-primary fw-bold fs-5";
   resetBtn.textContent = "Reset";
   buttonWrapper.appendChild(resetBtn);
-  renderScore();
-  renderMsg();
 }
 function renderScore() {
   const scoreWrapper = document.createElement("div");
-  scoreWrapper.className = "text-center";
-  scoreWrapper.textContent = "Score";
-  buttonWrapper.appendChild(scoreWrapper);
+  scoreWrapper.className = "text-center pt-3";
+  scoreWrapper.textContent = `Score: ${score} /${questions.length}`;
+  questionsSection.appendChild(scoreWrapper);
 }
 function renderMsg() {
   const msgWrapper = document.createElement("div");
   msgWrapper.className = "text-center";
-  msgWrapper.textContent = "msg";
-  buttonWrapper.appendChild(msgWrapper);
+  if (score <=3) {
+    msgWrapper.textContent = "Oops! Looks like there's room for improvement. Keep practicing!";
+  } else if (score <= 6) {
+    msgWrapper.textContent = "Not bad! You're getting there. Keep up the good work!"
+  } else if (score <= 8 ) {
+    msgWrapper.textContent = "Great job! You're almost there. Keep pushing yourself!"
+  } else if (score === 9 ) {
+    msgWrapper.textContent = "Wow! Impressive! Just a little more to go!"
+  } else if (score === 10) {
+    msgWrapper.textContent = "Perfect score! You're a quiz master! Congratulations!"
+  }
+  questionsSection.appendChild(msgWrapper);
 }
 
 
 let questions;
+let score = 0; //counter for score
+const questionsSection = document.getElementById("questions");
 initialRender();
 
 
